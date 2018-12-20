@@ -5,6 +5,8 @@ if(typeof Checkout === 'object'){
 
         //attach event listener to continue button (we don't know what page we are on)
         let el = window.document.getElementsByClassName("step__footer__continue-btn");
+        
+        //Save zip code to cookie if the input is available
         el[0].addEventListener("click",function() {
             let zip = window.document.getElementById("checkout_shipping_address_zip").value;
             window.document.cookie = "zipCode=" + zip;
