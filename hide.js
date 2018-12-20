@@ -3,7 +3,7 @@ if(typeof Checkout === 'object'){
     if(typeof Checkout.$ === 'function'){
         console.log("live");
 
-        //attach even listener to continue button
+        //attach event listener to continue button (we don't know what page we are on)
         let el = window.document.getElementsByClassName("step__footer__continue-btn");
         el[0].addEventListener("click",function() {
             let zip = window.document.getElementById("checkout_shipping_address_zip").value;
@@ -16,7 +16,7 @@ if(typeof Checkout === 'object'){
             return b ? b.pop() : '';
         }
 
-        //gets current US State if applicaple
+        //gets current US zip code if applicable
         let currentZip = getCookieValue("zipCode");
         let isApproved = false;
         let approvedZips = ['38501','38502','38503','38506','38583','38574','38570'];
@@ -25,7 +25,7 @@ if(typeof Checkout === 'object'){
                 isApproved = true;
             }
         }
-        //deselects local picup if not approved zipcode
+        //deselects and disables local picup if not approved zip code
         if (!isApproved)
         {
             let firstShipMethod = window.document.getElementById("checkout_shipping_rate_id_shopify-customer20pickup20cookeville20tn-000");
