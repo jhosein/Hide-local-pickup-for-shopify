@@ -17,23 +17,58 @@ if(typeof Checkout === 'object'){
             var b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)');
             return b ? b.pop() : '';
         }
-
-        //gets current US zip code if applicable
-        let currentZip = getCookieValue("zipCode");
-        let isApproved = false;
-        let approvedZips = ['38501','38502','38503','38506','38583','38574','38570'];
-        for (let i = 0; i < approvedZips.length; i++) {
-            if(currentZip === approvedZips[i]) {
-                isApproved = true;
-            }
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
         }
-        //deselects and disables local picup if not approved zip code
-        if (!isApproved)
+
+        //Are we on shipping options page?
+        if(getParameterByName('step') === "shipping_method")
         {
-            let firstShipMethod = window.document.getElementById("checkout_shipping_rate_id_shopify-customer20pickup20cookeville20tn-000");
-            let shipMethods = window.document.getElementsByClassName('input-radio');
-            shipMethods[1].checked = true;
-            firstShipMethod.disabled= true;
+            console.log('on shipping page');
+
+            //gets current US zip code if applicable
+            var currentZip = getCookieValue("zipCode");
+            var isApproved = false;
+            var approvedZips = ['38501','38502','38503','38506','38583','38574','38570'];
+            for (let i = 0; i < approvedZips.length; i++) {
+                if(currentZip === approvedZips[i]) {
+                    isApproved = true;
+                }
+            }
+            //assuming shipping is already populated, run deselect()
+            deselect();
+
+            //TODO assuming shipping did not populate, run deslect() after
+            
+
+            //deselects and disables local picup if not approved zip code
+            function deselect() {
+                if (!isApproved)
+                {
+                    console.log('is not approved');
+                    let firstShipMethod = window.document.getElementById("checkout_shipping_rate_id_shopify-customer20pickup20cookeville20tn-000");
+                    let shipMethods = window.document.getElementsByClassName('input-radio');
+                    shipMethods[1].checked = true;
+                    firstShipMethod.disabled = true;
+                }
+            }
+
+
+           /* let isLoading = true;
+            while(isLoading){
+                let spinner = window.document.getElementsByClassName("blank-slate");
+                if (spinner.length = 0)
+                isLoading = false;
+                console.log("waiting..");
+            }*/
+
         }
         }
       }
+
